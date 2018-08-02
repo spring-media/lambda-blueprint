@@ -15,7 +15,6 @@ Resources:
     Properties:
       FunctionName: lambda-blueprint-api-fct
       Description: Lambda function triggered by an API gateway request
-      MemorySize: 128
       Handler: bin/api
       Events:
         Vote:
