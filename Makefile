@@ -1,10 +1,6 @@
 NAME := lambda-blueprint
 PKG := github.com/spring-media/$(NAME)
 
-# AWS vars
-BUCKET ?= sam-cf-package
-REGION ?= eu-central-1
-
 # Set an output prefix, which is the local directory if not specified
 PREFIX?=$(shell pwd)
 # Set the build dir, where built cross-compiled binaries will be output
@@ -74,14 +70,6 @@ cover: ## Runs go test with coverage
 		fi; \
 	done;
 
-.PHONY: setup
-setup: ## Creates S3 deployment bucket
-	@echo "+ $@"
-	@aws s3api create-bucket \
-	--bucket $(BUCKET) \
-	--create-bucket-configuration LocationConstraint=$(REGION) \
-	--region $(REGION)
-
 .PHONY: release
 release: ## Builds cross-compiled binaries
 	@echo "+ $@"
@@ -90,39 +78,15 @@ release: ## Builds cross-compiled binaries
 		-o $(BUILDDIR)/$$dir -a $(PKG)/$(FUNCDIR)/$$dir; \
 	done
 
-.PHONY: package
-package: release ## Packages and uploads CloudFormation stack ressources to S3
-	@echo "+ $@"
-	@aws cloudformation package \
-	--template-file template.yaml \
-	--s3-bucket $(BUCKET) \
-	--s3-prefix $(NAME) \
-	--output-template-file $(BUILDDIR)/packaged.yaml \
-	--region $(REGION)
-
 .PHONY: deploy
-deploy: clean package ## Creates/updates CloudFormation stack with termination protection
+deploy: ## Builds or changes infrastructure using Terraform
 	@echo "+ $@"
-	@aws cloudformation deploy \
-	--template-file $(BUILDDIR)/packaged.yaml \
-	--stack-name $(NAME) \
-	--capabilities CAPABILITY_IAM \
-	--region $(REGION)
-	@aws cloudformation update-termination-protection \
-	--enable-termination-protection \
-	--stack-name $(NAME) \
-	--region $(REGION)
+	@ cd terraform && terraform apply
 
-.PHONY: delete-stack
-delete-stack: ## Disabled termination protection and deletes CloudFormation stack
+.PHONY: destroy
+destroy: ## Destroy Terraform-managed infrastructure
 	@echo "+ $@"
-	@aws cloudformation update-termination-protection \
-	--no-enable-termination-protection \
-	--stack-name $(NAME) \
-	--region $(REGION)
-	@aws cloudformation delete-stack \
-	--stack-name $(NAME) \
-	--region $(REGION)
+	@ cd terraform && terraform destroy
 
 .PHONY: clean
 clean: ## Cleanup any build binaries or packages
