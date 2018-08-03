@@ -1,8 +1,8 @@
-variable "aws_region" {
-    default = "eu-central-1"
-}
-
 variable "function_name" {}
+
+variable "s3_bucket" {}
+
+variable "s3_key" {}
 
 variable "enabled" {
     default = true
@@ -24,8 +24,3 @@ variable "memory_size" {
 variable "handler" {}
 
 variable "schedule_expression" {}
-
-variable "source_code_hash" {}
-
-variable "filename" {}
-

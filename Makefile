@@ -1,6 +1,10 @@
 NAME := lambda-blueprint
 PKG := github.com/spring-media/$(NAME)
 
+VERSION ?= $(shell cat VERSION.txt)
+REGION ?= eu-central-1
+S3_BUCKET := tf-serverless-deployment-bucket-$(REGION)
+
 # Set an output prefix, which is the local directory if not specified
 PREFIX?=$(shell pwd)
 # Set the build dir, where built cross-compiled binaries will be output
@@ -71,22 +75,43 @@ cover: ## Runs go test with coverage
 	done;
 
 .PHONY: release
-release: ## Builds cross-compiled binaries
+release: ## Builds cross-compiled functions
 	@echo "+ $@"
 	@for dir in `ls $(FUNCDIR)`; do \
 		GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build \
 		-o $(BUILDDIR)/$$dir -a $(PKG)/$(FUNCDIR)/$$dir; \
 	done
 
+.PHONY: init
+init: ## Initializes AWS S3 for deployment
+	@echo "+ $@"
+	@aws s3api create-bucket \
+	--bucket=$(S3_BUCKET) \
+	--create-bucket-configuration LocationConstraint=$(REGION) \
+	--region=$(REGION)
+
+.PHONY: package
+package: release ## Creates and uploads S3 deployment packages for all functions
+	@echo "+ $@"
+	@for dir in `ls $(FUNCDIR)`; do \
+		zip -j $(BUILDDIR)/$$dir.zip bin/$$dir; \
+		aws s3 cp $(BUILDDIR)/$$dir.zip s3://$(S3_BUCKET)/$(VERSION)/$$dir.zip --region=$(REGION); \
+	done
+
 .PHONY: deploy
 deploy: ## Builds or changes infrastructure using Terraform
-	@echo "+ $@"
-	@ cd terraform && terraform apply
+	@cd terraform && terraform apply \
+	-var version=$(VERSION) \
+	-var region=$(REGION) \
+	-var s3_bucket=$(S3_BUCKET)
 
 .PHONY: destroy
 destroy: ## Destroy Terraform-managed infrastructure
 	@echo "+ $@"
-	@ cd terraform && terraform destroy
+	@cd terraform && terraform destroy \
+	-var version=$(VERSION) \
+	-var region=$(REGION) \
+	-var s3_bucket=$(S3_BUCKET)
 
 .PHONY: clean
 clean: ## Cleanup any build binaries or packages
