@@ -1,1 +1,6 @@
+# build
 bin/
+
+# terraform
+.terraform
+terraform.tfstate*
