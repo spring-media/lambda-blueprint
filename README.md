@@ -22,11 +22,29 @@ check `make help` for all targets.
 
 ## infrastructure
 
+All infrastructure targets support configuration of the AWS region. Example to override the default:
+
+```
+make REGION=eu-west-1 deploy
+```
+
+### init
+
+to initialize S3 deployment bucket (one-time operation) run
+
+```
+make init
+```
+
+### deploy
+
 to build/change infrastructure using Terraform run
 
 ```
-make deploy
+make package deploy
 ```
+
+### destroy
 
 to destroy Terraform-managed infrastructure run
 
@@ -34,9 +52,19 @@ to destroy Terraform-managed infrastructure run
 make destroy
 ```
 
+### Rollback
+
+to rollback to a previous version (uploaded to S3) provide the target version and run
+
+```
+make VERSION=v0.0.1 deploy
+```
+
 ## todo
 
 * CloudWatch alarms
 * API Gateway event example
 * replace vgo with go modules (1.11)
+* terraform plan ?!
+* support for policy config of module
 
