@@ -24,3 +24,7 @@ variable "memory_size" {
 variable "handler" {}
 
 variable "schedule_expression" {}
+
+variable "log_retention_in_days" {
+    default = 14
+}

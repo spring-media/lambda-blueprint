@@ -98,8 +98,17 @@ package: release ## Creates and uploads S3 deployment packages for all functions
 		aws s3 cp $(BUILDDIR)/$$dir.zip s3://$(S3_BUCKET)/$(VERSION)/$$dir.zip --region=$(REGION); \
 	done
 
+.PHONY: plan
+plan: ## Generate and show an Terraform execution plan
+	@echo "+ $@"
+	@cd terraform && terraform plan \
+	-var version=$(VERSION) \
+	-var region=$(REGION) \
+	-var s3_bucket=$(S3_BUCKET)
+
 .PHONY: deploy
 deploy: ## Builds or changes infrastructure using Terraform
+	@echo "+ $@"
 	@cd terraform && terraform apply \
 	-var version=$(VERSION) \
 	-var region=$(REGION) \

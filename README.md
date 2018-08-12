@@ -65,6 +65,5 @@ make VERSION=v0.0.1 deploy
 * CloudWatch alarms
 * API Gateway event example
 * replace vgo with go modules (1.11)
-* terraform plan ?!
 * support for policy config of module
 
