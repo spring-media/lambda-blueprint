@@ -1,3 +1,7 @@
-output "lambda_arn" {
+output "functions" {
+  value = "${aws_lambda_function.lambda.*.function_name}"
+}
+
+output "arn" {
   value = "${aws_lambda_function.lambda.*.arn}"
 }
