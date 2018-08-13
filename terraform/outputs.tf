@@ -1,6 +1,6 @@
-output "functions" {
-  value = "${module.lambda-scheduled.functions}"
+output "lambda_functions" {
+  value = "${module.lambda-scheduled.lambda_functions}"
 }
-output "arn" {
-  value = "${module.lambda-scheduled.arn}"
+output "lambda_arns" {
+  value = "${module.lambda-scheduled.lambda_arns}"
 }
