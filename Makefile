@@ -13,23 +13,25 @@ FUNCDIR := func
 
 # Binary dependencies for this Makefile
 BIN_DIR := $(GOPATH)/bin
-VGO := $(BIN_DIR)/vgo
 LINTER := $(BIN_DIR)/golint
+DEP := $(BIN_DIR)/dep
 STATIC_CHECK := $(BIN_DIR)/staticcheck
-
-# Set our default go compiler
-GO ?= vgo
 
 all: clean build fmt lint test staticcheck vet
 
-$(VGO):
-	go get -u golang.org/x/vgo
+$(DEP):
+	go get -u github.com/golang/dep/cmd/dep
+
+.PHONY: dep
+dep: $(DEP) ## Install the project's dependencies
+	@echo "+ $@"
+	@dep ensure
 
 .PHONY: build
-build: $(VGO) ## Builds static executables
+build: ## Builds static executables
 	@echo "+ $@"
 	@for dir in `ls $(FUNCDIR)`; do \
-		CGO_ENABLED=0 $(GO) build $(PKG)/$(FUNCDIR)/$$dir; \
+		CGO_ENABLED=0 go build -o $(BUILDDIR)/$$dir $(PKG)/$(FUNCDIR)/$$dir; \
 	done
 
 .PHONY: fmt
@@ -46,9 +48,9 @@ lint: $(LINTER) ## Verifies `golint` passes
 	@golint ./... | grep -v '.pb.go:' | grep -v vendor | tee /dev/stderr
 
 .PHONY: vet
-vet: $(VGO) ## Verifies `go vet` passes
+vet: ## Verifies `go vet` passes
 	@echo "+ $@"
-	@$(GO) vet $(shell go list ./... | grep -v vendor) | grep -v '.pb.go:' | tee /dev/stderr
+	@go vet $(shell go list ./... | grep -v vendor) | grep -v '.pb.go:' | tee /dev/stderr
 
 $(STATIC_CHECK):
 	go get -u honnef.co/go/tools/cmd/staticcheck
@@ -59,9 +61,9 @@ staticcheck: $(STATIC_CHECK) ## Verifies `staticcheck` passes
 	@staticcheck $(shell go list ./... | grep -v vendor) | grep -v '.pb.go:' | tee /dev/stderr
 
 .PHONY: test
-test: $(VGO) ## Runs the go tests
+test: ## Runs the go tests
 	@echo "+ $@"
-	$(GO) test -v $(shell go list ./... | grep -v vendor)
+	go test -v $(shell go list ./... | grep -v vendor)
 
 .PHONY: cover
 cover: ## Runs go test with coverage
