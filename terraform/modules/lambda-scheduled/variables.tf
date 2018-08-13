@@ -1,5 +1,5 @@
 variable "function_name" {
-    description = "A unique name for your Lambda Function. "
+    description = "A unique name for your Lambda Function."
 }
 
 variable "description" {
