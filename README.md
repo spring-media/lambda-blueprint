@@ -1,4 +1,4 @@
-lambda-blueprint
+lambda-blueprint [![Build Status](https://travis-ci.com/spring-media/lambda-blueprint.svg?branch=master)](https://travis-ci.com/spring-media/lambda-blueprint)
 ================
 
 Blueprint for developing and deploying AWS Lambda functions using [Go](https://golang.org/dl/) an[Terraform](https://www.terraform.io/).
