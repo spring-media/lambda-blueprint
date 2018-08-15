@@ -85,7 +85,7 @@ release: ## Builds cross-compiled functions
 	done
 
 .PHONY: init
-init: ## Initializes AWS S3 for deployment
+s3-init: ## Initializes AWS S3 for deployment
 	@echo "+ $@"
 	@aws s3api create-bucket \
 	--bucket=$(S3_BUCKET) \
@@ -100,13 +100,10 @@ package: release ## Creates and uploads S3 deployment packages for all functions
 		aws s3 cp $(BUILDDIR)/$$dir.zip s3://$(S3_BUCKET)/$(VERSION)/$$dir.zip --region=$(REGION); \
 	done
 
-.PHONY: plan
-plan: ## Generate and show an Terraform execution plan
+.PHONY: init
+init: ## Initialize Terraform working directory
 	@echo "+ $@"
-	@cd terraform && terraform plan \
-	-var version=$(VERSION) \
-	-var region=$(REGION) \
-	-var s3_bucket=$(S3_BUCKET)
+	@cd terraform && terraform init
 
 .PHONY: deploy
 deploy: ## Builds or changes infrastructure using Terraform

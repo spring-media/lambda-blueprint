@@ -1,9 +1,10 @@
-# build
+# binaries
 bin/
-
-# dependencies
 vendor/
 
 # terraform
 .terraform
 terraform.tfstate*
+
+# IDE
+.vscode
