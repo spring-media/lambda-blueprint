@@ -105,6 +105,14 @@ init: ## Initialize Terraform working directory
 	@echo "+ $@"
 	@cd terraform && terraform init
 
+.PHONY: validate
+validate: ## Validates the Terraform files
+	@echo "+ $@"
+	@cd terraform && terraform validate \
+	-var version=$(VERSION) \
+	-var region=$(REGION) \
+	-var s3_bucket=$(S3_BUCKET)
+
 .PHONY: deploy
 deploy: ## Builds or changes infrastructure using Terraform
 	@echo "+ $@"
