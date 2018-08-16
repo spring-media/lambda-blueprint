@@ -17,3 +17,8 @@ output "invoke_url" {
   description = "The URL to invoke the API pointing to the stage, e.g. https://z4675bid1j.execute-api.eu-west-2.amazonaws.com/prod"
   value       = "${module.api.invoke_url}"
 }
+
+output "stream_arn" {
+  description = "The ARN of the DynamoDB table stream."
+  value       = "${aws_dynamodb_table.dynamodb.stream_arn}"
+}
