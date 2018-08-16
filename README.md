@@ -17,6 +17,12 @@ to lint, test, build and statically analyze the lambda functions run
 make
 ```
 
+to vendor dependencies (in case compiler complains `cannot find package "github.com/aws/aws-lambda-go/events"`) run
+
+```
+make dep
+```
+
 check `make help` for all targets.
 
 ## infrastructure
