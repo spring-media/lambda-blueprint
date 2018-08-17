@@ -1,7 +1,7 @@
 lambda-blueprint [![Build Status](https://travis-ci.com/spring-media/lambda-blueprint.svg?branch=master)](https://travis-ci.com/spring-media/lambda-blueprint)
 ================
 
-Blueprint for developing and deploying AWS Lambda functions using [Go](https://golang.org/dl/) an[Terraform](https://www.terraform.io/).
+Blueprint for developing and deploying AWS Lambda functions using [Go](https://golang.org/dl/) and [Terraform](https://www.terraform.io/).
 
 ## dependencies
 
@@ -38,7 +38,21 @@ make REGION=eu-west-1 deploy
 to initialize S3 deployment bucket (one-time operation) run
 
 ```
+make s3-init
+```
+
+to initialize terraform run
+
+```
 make init
+```
+
+### package
+
+to release and upload new lambda versions to S3 run
+
+```
+make package
 ```
 
 ### deploy
@@ -46,7 +60,7 @@ make init
 to build/change infrastructure using Terraform run
 
 ```
-make package deploy
+make deploy
 ```
 
 ### destroy
@@ -68,6 +82,5 @@ make VERSION=v0.0.1 deploy
 ## todo
 
 * CloudWatch alarms
-* API Gateway event example
 * support for policy config of module
 

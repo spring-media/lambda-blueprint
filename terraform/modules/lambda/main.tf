@@ -77,3 +77,40 @@ resource "aws_cloudwatch_event_target" "lambda" {
   rule      = "${aws_cloudwatch_event_rule.lambda.name}"
   arn       = "${aws_lambda_function.lambda.arn}"
 }
+
+resource "aws_lambda_event_source_mapping" "stream_source" {
+  count             = "${var.stream_enabled}"
+  event_source_arn  = "${var.stream_event_source_arn}"
+  function_name     = "${aws_lambda_function.lambda.function_name}"
+  starting_position = "${var.stream_starting_position}"
+}
+
+data "aws_iam_policy_document" "stream_policy_document" {
+  statement {
+    // TODO: support kinesis
+    actions = [
+      "dynamodb:DescribeStream",
+      "dynamodb:GetShardIterator",
+      "dynamodb:GetRecords",
+      "dynamodb:ListStreams",
+    ]
+
+    // TODO: restrict on specific table/region/account?
+    resources = [
+      "arn:aws:dynamodb:*:*:*",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "stream_policy" {
+  count       = "${var.stream_enabled}"
+  name        = "${var.function_name}-stream-consumer"
+  description = "Provides minimum DynamoDb stream processing permissions for ${var.function_name}."
+  policy      = "${data.aws_iam_policy_document.stream_policy_document.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "stream_policy_attachment" {
+  count      = "${var.stream_enabled}"
+  role       = "${aws_iam_role.lambda.name}"
+  policy_arn = "${aws_iam_policy.stream_policy.arn}"
+}

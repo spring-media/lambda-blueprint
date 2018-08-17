@@ -14,12 +14,89 @@
   revision = "e630af386f8aad6ec9fc899b951cf62d37cfe56f"
   version = "v1.4.0"
 
+[[projects]]
+  digest = "1:413b2c44c0f44173f35715f172d741845c216528400f3a41414387527971c50c"
+  name = "github.com/aws/aws-sdk-go"
+  packages = [
+    "aws",
+    "aws/awserr",
+    "aws/awsutil",
+    "aws/client",
+    "aws/client/metadata",
+    "aws/corehandlers",
+    "aws/credentials",
+    "aws/credentials/ec2rolecreds",
+    "aws/credentials/endpointcreds",
+    "aws/credentials/stscreds",
+    "aws/csm",
+    "aws/defaults",
+    "aws/ec2metadata",
+    "aws/endpoints",
+    "aws/request",
+    "aws/session",
+    "aws/signer/v4",
+    "internal/sdkio",
+    "internal/sdkrand",
+    "internal/sdkuri",
+    "internal/shareddefaults",
+    "private/protocol",
+    "private/protocol/json/jsonutil",
+    "private/protocol/jsonrpc",
+    "private/protocol/query",
+    "private/protocol/query/queryutil",
+    "private/protocol/rest",
+    "private/protocol/xml/xmlutil",
+    "service/dynamodb",
+    "service/sts",
+  ]
+  pruneopts = "UT"
+  revision = "b36008bfc7d4b9826423278ae193420e41afc4b4"
+  version = "v1.15.14"
+
+[[projects]]
+  digest = "1:fe8a03a8222d5b913f256972933d26d24ad7c8286692a42943bc01633cc8fce3"
+  name = "github.com/go-ini/ini"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "358ee7663966325963d4e8b2e1fbd570c5195153"
+  version = "v1.38.1"
+
+[[projects]]
+  digest = "1:e22af8c7518e1eab6f2eab2b7d7558927f816262586cd6ed9f349c97a6c285c4"
+  name = "github.com/jmespath/go-jmespath"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "0b12d6b5"
+
+[[projects]]
+  digest = "1:757b110984b77e820e01c60d3ac03a376a0fdb05c990dd9d6bd4f9ba0d606261"
+  name = "github.com/rs/xid"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "2c7e97ce663ff82c49656bca3048df0fdd83c5f9"
+  version = "v1.2.0"
+
+[[projects]]
+  branch = "master"
+  digest = "1:2f71657f09ff05e4567909e9e0de7ad799828c96d402c540b41dc044a6590fb2"
+  name = "golang.org/x/sys"
+  packages = [
+    "unix",
+    "windows",
+  ]
+  pruneopts = "UT"
+  revision = "1c9583448a9c3aa0f9a6a5241bf73c0bd8aafded"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/aws/aws-lambda-go/events",
     "github.com/aws/aws-lambda-go/lambda",
+    "github.com/aws/aws-sdk-go/aws",
+    "github.com/aws/aws-sdk-go/aws/session",
+    "github.com/aws/aws-sdk-go/service/dynamodb",
+    "github.com/rs/xid",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
