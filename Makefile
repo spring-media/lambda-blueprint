@@ -3,7 +3,7 @@ PKG := github.com/spring-media/$(NAME)
 
 VERSION ?= $(shell cat VERSION.txt)
 REGION ?= eu-central-1
-S3_BUCKET := tf-serverless-deployment-bucket-$(REGION)
+S3_BUCKET := tf-$(NAME)-deployment-bucket-$(REGION)
 
 # Set an output prefix, which is the local directory if not specified
 PREFIX?=$(shell pwd)
@@ -104,6 +104,14 @@ package: release ## Creates and uploads S3 deployment packages for all functions
 init: ## Initialize Terraform working directory
 	@echo "+ $@"
 	@cd terraform && terraform init
+
+.PHONY: plan
+plan: ## Generate and show a Terraform execution plan
+	@echo "+ $@"
+	@cd terraform && terraform plan \
+	-var version=$(VERSION) \
+	-var region=$(REGION) \
+	-var s3_bucket=$(S3_BUCKET)
 
 .PHONY: validate
 validate: ## Validates the Terraform files

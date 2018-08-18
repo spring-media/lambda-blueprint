@@ -1,13 +1,45 @@
-lambda-blueprint [![Build Status](https://travis-ci.com/spring-media/lambda-blueprint.svg?branch=master)](https://travis-ci.com/spring-media/lambda-blueprint)
-================
+# lambda-blueprint [![Build Status](https://travis-ci.com/spring-media/lambda-blueprint.svg?branch=master)](https://travis-ci.com/spring-media/lambda-blueprint) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 Blueprint for developing and deploying AWS Lambda functions using [Go](https://golang.org/dl/) and [Terraform](https://www.terraform.io/).
 
-## dependencies
+## setup
 
-* (dev) [Go 1.10+](https://golang.org/dl/)
-* (deploy) [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/installing.html) with configured [credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
-* (deploy) [Terraform 0.11.7+](https://www.terraform.io/)
+### Go
+
+Install [Go 1.10+](https://golang.org/dl/) and test your installation. If you are new to Go it's also recommended to take the [Tour of Go](https://tour.golang.org/welcome/1) and do the [Go Tooling Workshop](https://github.com/campoy/go-tooling-workshop).
+
+### Source Code
+
+With working Go installation and _GOPATH_ setup run
+
+```
+go get -d github.com/spring-media/lambda-blueprint
+```
+
+to get the source code and try to build, test and lint it
+
+```
+cd $GOPATH/src/github.com/spring-media/lambda-blueprint
+make dep all 
+```
+
+### AWS CLI
+
+Install the [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/installing.html), configure your [credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) and test the installation
+
+```
+aws --version
+```
+
+### Terraform
+
+Install [Terraform 0.11.7+](https://www.terraform.io/) and test the installation
+
+```
+cd $GOPATH/src/github.com/spring-media/lambda-blueprint
+make init plan
+```
 
 ## build
 
@@ -26,12 +58,6 @@ make dep
 check `make help` for all targets.
 
 ## infrastructure
-
-All infrastructure targets support configuration of the AWS region. Example to override the default:
-
-```
-make REGION=eu-west-1 deploy
-```
 
 ### init
 
