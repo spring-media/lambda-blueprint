@@ -3,7 +3,7 @@ PKG := github.com/spring-media/$(NAME)
 
 VERSION ?= $(shell cat VERSION.txt)
 REGION ?= eu-central-1
-S3_BUCKET := tf-$(NAME)-deployment-bucket-$(REGION)
+S3_BUCKET := tf-$(USER)-$(NAME)-deployment-$(REGION)
 
 # Set an output prefix, which is the local directory if not specified
 PREFIX?=$(shell pwd)

@@ -105,8 +105,3 @@ to rollback to a previous version (uploaded to S3) provide the target version an
 make VERSION=v0.0.1 deploy
 ```
 
-## todo
-
-* CloudWatch alarms
-* support for policy config of module
-
