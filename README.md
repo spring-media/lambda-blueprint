@@ -19,7 +19,9 @@ With working Go installation and _GOPATH_ setup run
 go get -d github.com/spring-media/lambda-blueprint
 ```
 
-to get the source code and try to build, test and lint it
+to get the source code. Please ignore warnings about missing Go packages in `$GOPATH/src/github.com/spring-media/lambda-blueprint`
+
+and then try to build, test and lint the code by running
 
 ```
 cd $GOPATH/src/github.com/spring-media/lambda-blueprint
