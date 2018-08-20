@@ -84,13 +84,19 @@ release: ## Builds cross-compiled functions
 		-o $(BUILDDIR)/$$dir -a $(PKG)/$(FUNCDIR)/$$dir; \
 	done
 
-.PHONY: init
-s3-init: ## Initializes AWS S3 for deployment
+.PHONY: s3-init
+s3-init: ## Creates AWS S3 bucket for deployments
 	@echo "+ $@"
 	@aws s3api create-bucket \
 	--bucket=$(S3_BUCKET) \
 	--create-bucket-configuration LocationConstraint=$(REGION) \
 	--region=$(REGION)
+
+.PHONY: s3-destroy
+s3-destroy: ## Removes AWS S3 bucket including all deployments
+	@echo "+ $@"
+	@echo s3://$(S3_BUCKET)
+	@aws s3 rb s3://$(S3_BUCKET) --force
 
 .PHONY: package
 package: release ## Creates and uploads S3 deployment packages for all functions
@@ -148,4 +154,4 @@ clean: ## Cleanup any build binaries or packages
 
 .PHONY: help
 help: ## Display this help screen
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'	
+	@grep -E '^[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'	
