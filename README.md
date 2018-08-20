@@ -41,6 +41,10 @@ cd $GOPATH/src/github.com/spring-media/lambda-blueprint
 make init plan
 ```
 
+### Editor
+
+Using [VSCode](https://code.visualstudio.com/) with [Go](https://code.visualstudio.com/docs/languages/go) and [Terraform](https://marketplace.visualstudio.com/items?itemName=mauve.terraform) extensions is recommended.
+
 ## build
 
 to lint, test, build and statically analyze the lambda functions run
