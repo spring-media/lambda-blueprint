@@ -7,7 +7,9 @@ Blueprint for developing and deploying AWS Lambda functions using [Go](https://g
 
 ### Go
 
-Install [Go 1.10+](https://golang.org/dl/) and test your installation. If you are new to Go it's also recommended to take the [Tour of Go](https://tour.golang.org/welcome/1) and do the [Go Tooling Workshop](https://github.com/campoy/go-tooling-workshop).
+Install [Go 1.10+](https://golang.org/doc/install) and test your installation. Make sure to set [GOPATH](https://github.com/golang/go/wiki/GOPATH) environment variable and to add `$GOPATH/bin` to your `PATH`.
+
+If you are new to Go it's also recommended to take the [Tour of Go](https://tour.golang.org/welcome/1) and do the [Go Tooling Workshop](https://github.com/campoy/go-tooling-workshop).
 
 ### Source Code
 
@@ -34,7 +36,7 @@ aws --version
 
 ### Terraform
 
-Install [Terraform 0.11.7+](https://www.terraform.io/) and test the installation
+Install [Terraform 0.11.7+](https://www.terraform.io/) (e.g. using `brew install terraform`) and test the installation
 
 ```
 cd $GOPATH/src/github.com/spring-media/lambda-blueprint
