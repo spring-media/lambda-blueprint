@@ -105,6 +105,12 @@ to destroy Terraform-managed infrastructure run
 make destroy
 ```
 
+to remove the S3 deployment bucket and all versions run
+
+```
+make s3-destroy
+```
+
 ### Rollback
 
 to rollback to a previous version (uploaded to S3) provide the target version and run
