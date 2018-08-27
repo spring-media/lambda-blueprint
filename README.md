@@ -7,25 +7,12 @@ Blueprint for developing and deploying AWS Lambda functions using [Go](https://g
 
 ### Go
 
-Install [Go 1.10+](https://golang.org/doc/install) and test your installation. Make sure to set [GOPATH](https://github.com/golang/go/wiki/GOPATH) environment variable and to add `$GOPATH/bin` to your `PATH`.
+Install [Go 1.11+](https://golang.org/doc/install). If you are new to Go it's also recommended to take the [Tour of Go](https://tour.golang.org/welcome/1) and do the [Go Tooling Workshop](https://github.com/campoy/go-tooling-workshop).
 
-If you are new to Go it's also recommended to take the [Tour of Go](https://tour.golang.org/welcome/1) and do the [Go Tooling Workshop](https://github.com/campoy/go-tooling-workshop).
-
-### Source Code
-
-With working Go installation and _GOPATH_ setup run
+Then try to build, test and lint the code by running
 
 ```
-go get -d github.com/spring-media/lambda-blueprint
-```
-
-to get the source code. Please ignore warnings about missing Go packages in `$GOPATH/src/github.com/spring-media/lambda-blueprint`
-
-and then try to build, test and lint the code by running
-
-```
-cd $GOPATH/src/github.com/spring-media/lambda-blueprint
-make dep all 
+make all 
 ```
 
 ### AWS CLI
@@ -55,12 +42,6 @@ to lint, test, build and statically analyze the lambda functions run
 
 ```
 make
-```
-
-to vendor dependencies (in case compiler complains `cannot find package "github.com/aws/aws-lambda-go/events"`) run
-
-```
-make dep
 ```
 
 check `make help` for all targets.
