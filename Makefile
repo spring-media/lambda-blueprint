@@ -3,7 +3,7 @@ PKG := github.com/spring-media/$(NAME)
 
 VERSION ?= $(shell cat VERSION.txt)
 REGION ?= eu-central-1
-S3_BUCKET := tf-$(USER)-$(NAME)-deployment-$(REGION)
+S3_BUCKET := tf-$(NAME)-deployment-$(REGION)
 
 # Set an output prefix, which is the local directory if not specified
 PREFIX?=$(shell pwd)
@@ -11,21 +11,7 @@ PREFIX?=$(shell pwd)
 BUILDDIR := $(PREFIX)/bin
 FUNCDIR := func
 
-# Binary dependencies for this Makefile
-BIN_DIR := $(GOPATH)/bin
-LINTER := $(BIN_DIR)/golint
-DEP := $(BIN_DIR)/dep
-STATIC_CHECK := $(BIN_DIR)/staticcheck
-
 all: clean build fmt lint test staticcheck vet
-
-$(DEP):
-	go get -u github.com/golang/dep/cmd/dep
-
-.PHONY: dep
-dep: $(DEP) ## Install the project's dependencies
-	@echo "+ $@"
-	@dep ensure
 
 .PHONY: build
 build: ## Builds static executables
@@ -39,11 +25,8 @@ fmt: ## Verifies all files have men `gofmt`ed
 	@echo "+ $@"
 	@gofmt -s -l . | grep -v '.pb.go:' | grep -v vendor | tee /dev/stderr
 
-$(LINTER):
-	go get -u golang.org/x/lint/golint
-
 .PHONY: lint
-lint: $(LINTER) ## Verifies `golint` passes
+lint: ## Verifies `golint` passes
 	@echo "+ $@"
 	@golint ./... | grep -v '.pb.go:' | grep -v vendor | tee /dev/stderr
 
@@ -52,11 +35,8 @@ vet: ## Verifies `go vet` passes
 	@echo "+ $@"
 	@go vet $(shell go list ./... | grep -v vendor) | grep -v '.pb.go:' | tee /dev/stderr
 
-$(STATIC_CHECK):
-	go get -u honnef.co/go/tools/cmd/staticcheck
-
 .PHONY: staticcheck
-staticcheck: $(STATIC_CHECK) ## Verifies `staticcheck` passes
+staticcheck: ## Verifies `staticcheck` passes
 	@echo "+ $@"
 	@staticcheck $(shell go list ./... | grep -v vendor) | grep -v '.pb.go:' | tee /dev/stderr
 
@@ -69,7 +49,7 @@ test: ## Runs the go tests
 cover: ## Runs go test with coverage
 	@echo "" > coverage.txt
 	@for d in $(shell go list ./... | grep -v vendor); do \
-		$(GO) test -race -coverprofile=profile.out -covermode=atomic "$$d"; \
+		go test -race -coverprofile=profile.out -covermode=atomic "$$d"; \
 		if [ -f profile.out ]; then \
 			cat profile.out >> coverage.txt; \
 			rm profile.out; \
