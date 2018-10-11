@@ -1,8 +1,10 @@
 NAME := lambda-blueprint
 PKG := github.com/spring-media/$(NAME)
 
-VERSION ?= $(shell cat VERSION.txt)
-REGION ?= eu-central-1
+VERSION ?= $(shell cat VERSION.txt)+$(shell git rev-parse --short HEAD)
+REGION ?= eu-west-1
+ENVIRONMENT ?= production
+AUTO_DEPLOY ?= false
 S3_BUCKET := tf-$(NAME)-deployment-$(REGION)
 
 # Set an output prefix, which is the local directory if not specified
@@ -58,7 +60,7 @@ cover: ## Runs go test with coverage
 
 .PHONY: release
 release: ## Builds cross-compiled functions
-	@echo "+ $@"
+	@echo "+ $@ $(VERSION)"
 	@for dir in `ls $(FUNCDIR)`; do \
 		GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build \
 		-o $(BUILDDIR)/$$dir -a $(PKG)/$(FUNCDIR)/$$dir; \
@@ -81,36 +83,45 @@ s3-destroy: ## Removes AWS S3 bucket including all deployments
 .PHONY: package
 package: release ## Creates and uploads S3 deployment packages for all functions
 	@echo "+ $@"
+	@echo "Uploading release $(VERSION)"
 	@for dir in `ls $(FUNCDIR)`; do \
 		zip -j $(BUILDDIR)/$$dir.zip bin/$$dir; \
 		aws s3 cp $(BUILDDIR)/$$dir.zip s3://$(S3_BUCKET)/$(VERSION)/$$dir.zip --region=$(REGION); \
 	done
 
 .PHONY: init
-init: ## Initialize Terraform working directory
+init: ## Initialize Terraform working directory and backend configuration
 	@echo "+ $@"
-	@cd terraform && terraform init
-
-.PHONY: plan
-plan: ## Generate and show a Terraform execution plan
-	@echo "+ $@"
-	@cd terraform && terraform plan \
-	-var version=$(VERSION) \
-	-var region=$(REGION) \
-	-var s3_bucket=$(S3_BUCKET)
+	@cd terraform && terraform init \
+	-input=false \
+	-backend-config="key=$(ENVIRONMENT)/$(NAME)/terraform.tfstate"
 
 .PHONY: validate
-validate: ## Validates the Terraform files
+validate: ## Validates and rewrited the Terraform files to canonical format
 	@echo "+ $@"
+	@cd terraform && terraform fmt -check=true
 	@cd terraform && terraform validate \
 	-var version=$(VERSION) \
 	-var region=$(REGION) \
 	-var s3_bucket=$(S3_BUCKET)
 
+.PHONY: plan
+plan: ## Generate and show a Terraform execution plan
+	@echo "+ $@"
+	@cd terraform && terraform plan \
+	-input=false \
+	-var version=$(VERSION) \
+	-var region=$(REGION) \
+	-var s3_bucket=$(S3_BUCKET)
+
+ifeq ($(AUTO_DEPLOY), true)
+ FORCE=-auto-approve
+endif
+
 .PHONY: deploy
 deploy: ## Builds or changes infrastructure using Terraform
 	@echo "+ $@"
-	@cd terraform && terraform apply \
+	@cd terraform && terraform apply $(FORCE) -input=false \
 	-var version=$(VERSION) \
 	-var region=$(REGION) \
 	-var s3_bucket=$(S3_BUCKET)
