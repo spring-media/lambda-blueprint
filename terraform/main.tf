@@ -1,6 +1,6 @@
 module "lambda" {
-  source        = "github.com/spring-media/terraform-aws-lambda?ref=v2.0.0"
-  name          = "scheduled"
+  source        = "github.com/spring-media/terraform-aws-lambda?ref=v2.1.0"
+  handler       = "scheduled"
   function_name = "lambda-blueprint-stream-fct"
   s3_bucket     = "${var.s3_bucket}"
   s3_key        = "${var.version}/scheduled.zip"
