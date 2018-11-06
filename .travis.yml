@@ -3,7 +3,7 @@ language: go
 env:
   global:
     - GO111MODULE=on
-    - tf_version=0.11.8
+    - tf_version=0.11.10
 
 go:
   - 1.11.x
