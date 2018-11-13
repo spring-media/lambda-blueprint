@@ -1,5 +1,7 @@
 module "lambda" {
-  source        = "github.com/spring-media/terraform-aws-lambda?ref=v2.4.0"
+  source  = "spring-media/lambda/aws"
+  version = "2.4.1"
+
   handler       = "scheduled"
   function_name = "lambda-blueprint-stream-fct"
   s3_bucket     = "${var.s3_bucket}"
