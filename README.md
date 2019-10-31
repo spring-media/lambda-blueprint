@@ -1,5 +1,6 @@
 # lambda-blueprint [![Build Status](https://travis-ci.com/spring-media/lambda-blueprint.svg?branch=master)](https://travis-ci.com/spring-media/lambda-blueprint) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+**THIS IS DEPRECATED - use [func](https://github.com/spring-media/func) instead**
 
 Blueprint for developing and deploying AWS Lambda functions using [Go](https://golang.org/dl/) and [Terraform](https://www.terraform.io/).
 
